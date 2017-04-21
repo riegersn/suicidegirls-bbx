@@ -1,0 +1,16 @@
+<app>
+	<id>suicidegirls</id>
+	<name>SuicideGirls</name>
+	<version>0.99</version>
+	<description>SuicideGirls is a community that celebrates ALTERNATIVE BEAUTY and alternative culture from all over the world.</description>
+	<thumb>http://dir.boxee.tv/apps/suicidegirls/thumb.png</thumb>
+	<repository>http://dir.boxee.tv/apps</repository>
+	<media>pictures</media>
+	<copyright>Boxee</copyright>
+	<email>support@boxee.tv</email>
+	<type>skin</type>
+	<startWindow>launch</startWindow>
+	<platform>all</platform>
+	<minversion>0.9.20</minversion>
+	<rating>adult</rating>
+</app>
