@@ -7,19 +7,27 @@ win = mc.GetActiveWindow()
 win.GetList(130).SetItems(mc.ListItems())
 config = mc.GetApp().GetLocalConfig()
 if config.GetValue("authenticated"):
-	win.GetButton(202).SetLabel("LOGOUT")
+    win.GetButton(202).SetLabel("LOGOUT")
 else:
-	win.GetButton(202).SetLabel("LOGIN")
+  	win.GetButton(202).SetLabel("LOGIN")
 ]]></onload>
 	<controls>
+
+    <!-- Background Image -->
 		<control type="image">
 			<width>1280</width>
 			<height>720</height>
 			<texture>sg_background.png</texture>
 		</control>
+
 		<control type="label" id="40">
 			<visible>!Container(130).IsEmpty + !Control.HasFocus(121)</visible>
 		</control>
+
+
+    <!--
+    BEGIN Search Result View
+    -->
 		<control type="group" id="129">
 			<visible>!Container(130).IsEmpty + !Control.HasFocus(121)</visible>
 			<animation type="Visible" reversible="true">
@@ -30,12 +38,14 @@ else:
 			  <effect type="fade" start="100" end="0" delay="0" time="300" />
 			  <effect type="slide" tween="quadratic" easing="out" start="0,160" end="0,0" time="500" />
 			</animation>
+      <!-- Search Background -->
 			<control type="image">
 				<width>1280</width>
 				<height>155</height>
 				<texture>sg_search_background.png</texture>
 				<aspectratio aligny="bottom">scale</aspectratio>
 			</control>
+      <!-- Left/Right Arrows -->
 			<control type="group">
 				<visible>!Container(130).IsEmpty + !Control.HasFocus(121)</visible>
 				<animation effect="fade" start="0" end="100" delay="100" time="500">Visible</animation>
@@ -57,6 +67,7 @@ else:
 					<visible>Container(130).HasNext</visible>
 				</control>
 			</control>
+      <!-- Results List -->
 			<control type="list" id="130">
 				<posy>15</posy>
 				<posx>62</posx>
@@ -160,33 +171,39 @@ else:
 win = mc.GetActiveWindow()
 list = win.GetList(130)
 item = list.GetItem( list.GetFocusedItem() )
-item.Dump()
 reg = mc.GetApp().GetLocalConfig()
 if not reg.GetValue("authenticated"):
-	mc.ShowDialogNotification("You must be logged in to perform this action.", "sg_icon_notification.png")
+    mc.ShowDialogNotification("You must be logged in to perform this action.", "sg_icon_notification.png")
 else:
-	win = mc.GetActiveWindow()
-	list = win.GetList(130)
-	item = list.GetItem( list.GetFocusedItem() )
-	#item.Dump()
-	#mc.ShowDialogNotification(str(item.GetImage(1)))
-	params = {
-		"url":			item.GetPath(),
-		"model":		item.GetLabel(),
-		"thumb":		item.GetThumbnail()
-		}
-	sg.launch(14002, params)
+    win = mc.GetActiveWindow()
+    list = win.GetList(130)
+    item = list.GetItem( list.GetFocusedItem() )
+    params = {
+      	"url":			item.GetPath(),
+      	"model":		item.GetLabel(),
+      	"thumb":		item.GetThumbnail()
+    }
+    sg.launch(14002, params)
 ]]></onclick>
 				</content>
 			</control>
 		</control>
+    <!--
+      END Search Results View
+    -->
+
+
+    <!--
+      BEGIN Main Menu
+    -->
 		<control type="group" id="50">
-			<!-- Top Menu Bar -->
+      <!-- Main Menu Background -->
 			<control type="image">
 				<width>1280</width>
 				<height>173</height>
 				<texture>sg_topbar.png</texture>
 			</control>
+      <!-- Logo -->
 			<control type="image">
 				<posy>5</posy>
 				<posx>30</posx>
@@ -194,8 +211,8 @@ else:
 				<height>145</height>
 				<texture>sg_logo.png</texture>
 			</control>
+      <!-- Menu List -->
 			<control type="group">
-				<!-- Main Menu -->
 				<posy>122</posy>
 				<posx>265</posx>
 				<control type="image">
@@ -203,6 +220,7 @@ else:
 					<height>40</height>
 					<texture>sg_menu_ends.png</texture>
 				</control>
+        <!-- Menu Items -->
 				<control type="grouplist" id="400">
 					<posx>1</posx>
 					<itemgap>2</itemgap>
@@ -225,7 +243,7 @@ else:
 						<onclick lang="python"><![CDATA[
 import sg
 if sg.hasAuth():
-	sg.launch(14001, {"url": "rss://dir.boxee.tv/apps/suicidegirls/girls"})
+    sg.launch(14001, {"url": "rss://dir.boxee.tv/apps/suicidegirls/girls"})
 ]]></onclick>
 					</control>
 					<control type="button" id="402">
@@ -262,9 +280,9 @@ sg.quickLaunch(14000)
 						<onclick lang="python"><![CDATA[
 import sg
 if sg.hasAuth():
-	sg.quickLaunch(14000)
+  	sg.quickLaunch(14000)
 else:
-	sg.launch(14003, {"url":"rss://dir.boxee.tv/apps/suicidegirls/free","model":"SuicideGirls","set":"Free Album Set"})
+  	sg.launch(14003, {"url":"rss://dir.boxee.tv/apps/suicidegirls/free","model":"SuicideGirls","set":"Free Album Set"})
 ]]></onclick>
 					</control>
 					<control type="button" id="404">
@@ -282,8 +300,8 @@ else:
 					</control>
 				</control>
 			</control>
+			<!-- Search / Sort By Dropdowns -->
 			<control type="group" id="300">
-				<!-- Search / Sort By -->
 				<posy>97</posy>
 				<posx>730</posx>
 				<control type="image">
@@ -318,8 +336,15 @@ mc.GetActiveWindow().GetControl(130).SetVisible(True)
 				</control>
 			</control>
 		</control>
+    <!--
+      END Main Menu
+    -->
+
+
+    <!--
+      BEGIN Login Panel
+    -->
 		<control type="group" id="200">
-			<!-- Login Panel -->
 			<posy>25</posy>
 			<posx>983</posx>
 			<control type="image">
@@ -364,19 +389,29 @@ mc.GetActiveWindow().GetControl(130).SetVisible(True)
 				<onclick lang="python"><![CDATA[
 win = mc.GetActiveWindow()
 config = mc.GetApp().GetLocalConfig()
-if config.GetValue("authenticated"): sg.logout_sg()
+if config.GetValue("authenticated"):
+    sg.logout_sg()
 else:
-	win = mc.GetActiveWindow()
-	win.PushState()
-	win.GetControl(700).SetVisible(True)
-	win.GetControl(701).SetFocus()
+    win = mc.GetActiveWindow()
+    win.PushState()
+    win.GetControl(700).SetVisible(True)
+    win.GetControl(701).SetFocus()
 ]]></onclick>
 			</control>
 		</control>
+    <!--
+      END Login Panel
+    -->
+
+
+    <!--
+      BEGIN All Girls View
+    -->
 		<control type="group">
 			<posy>168</posy>
 			<animation effect="slide" tween="quadratic" easing="in" start="0,0" end="0,70" time="500" condition="Control.IsVisible(40)" reversible="true">Conditional</animation>
 			<animation effect="slide" tween="quadratic" easing="out" start="0,70" end="0,0" time="500" condition="!Control.IsVisible(40)" reversible="true">Conditional</animation>
+      <!-- Heading Label -->
 			<control type="label">
 				<posy>3</posy>
 				<posx>21</posx>
@@ -384,6 +419,7 @@ else:
 				<textcolor>ffFFC0CB</textcolor>
 				<label>All Girls</label>
 			</control>
+      <!-- Panel Grid List -->
 			<control type="panel" id="121">
 				<posx>79</posx>
 				<posy>55</posy>
@@ -488,14 +524,22 @@ win = mc.GetActiveWindow()
 list = win.GetList(121)
 item = list.GetItem( list.GetFocusedItem() )
 params = {
-	"url":			item.GetPath(),
-	"model":		item.GetLabel()
-	}
+    "url":			item.GetPath(),
+    "model":		item.GetLabel()
+    }
 sg.launch(14002, params)
 ]]></onclick>
 				</content>
 			</control>
 		</control>
+    <!--
+      END All Girls View
+    -->
+
+
+    <!--
+      BEGIN Login Box
+    -->
 		<control type="group" id="700">
 			<posy>16</posy>
 			<posx>1280</posx>
@@ -565,19 +609,26 @@ win = mc.GetActiveWindow()
 user = win.GetEdit(701).GetText()
 password = win.GetEdit(702).GetText()
 if sg.login_sg(user, password):
-	sg.clear_login()
-	win.GetControl(700).SetVisible(False)
-	win.GetControl(202).SetFocus()
-	win.GetLabel(201).SetLabel(user.lower())
-	win.GetButton(202).SetLabel("LOGOUT")
+    sg.clear_login()
+    win.GetControl(700).SetVisible(False)
+    win.GetControl(202).SetFocus()
+    win.GetLabel(201).SetLabel(user.lower())
+    win.GetButton(202).SetLabel("LOGOUT")
 else:
-	sg.clear_login()
-	win.GetEdit(701).SetFocus()
+    sg.clear_login()
+    win.GetEdit(701).SetFocus()
 ]]></onclick>
 			</control>
 		</control>
+    <!--
+      END Login Box
+    -->
+
+
+    <!--
+      BEGIN Slideshow
+    -->
 		<control type="group" id="5000">
-			<!-- SLIDESHOW -->
 			<visible>false</visible>
 			<control type="image">
 				<width>1280</width>
@@ -590,18 +641,6 @@ else:
 				<orientation>horizontal</orientation>
 				<scrolltime>0</scrolltime>
 				<itemlayout width="1200" height="700">
-<!--
-					<control type="image">
-						<posx>65</posx>
-						<posy>20</posy>
-						<width>1150</width>
-						<height>680</height>
-						<info>Listitem.property(Image0)</info>
-						<bordersize>5</bordersize>
-						<bordertexture>white.png</bordertexture>
-						<aspectratio align="center" aligny="center">keep</aspectratio>
-					</control>
--->
 				</itemlayout>
 				<focusedlayout width="1200" height="700">
 					<control type="image">
@@ -620,72 +659,8 @@ else:
 				<content type="url" url="$INFO[App.param(url)]"></content>
 			</control>
 		</control>
-		<control type="group" id="700">
-			<posy>16</posy>
-			<posx>1280</posx>
-			<visible>false</visible>
-			<animation effect="slide" tween="quadratic" easing="in" start="0,0" end="-370,0" time="300" reversible="true" condition="Control.IsVisible(700)">Conditional</animation>
-			<control type="image">
-				<width>360</width>
-				<height>236</height>
-				<texture>sg_login.png</texture>
-			</control>
-			<control type="edit" id="701">
-				<posx>41</posx>
-				<posy>81</posy>
-				<width>240</width>
-				<height>33</height>
-				<onleft>-</onleft>
-				<onright>703</onright>
-				<onup>-</onup>
-				<ondown>702</ondown>
-				<onprev>-</onprev>
-				<onnext>702</onnext>
-				<label>-</label>
-				<textoffsetx>8</textoffsetx>
-				<align>left</align>
-				<aligny>center</aligny>
-				<font>sans21</font>
-				<textcolor>black</textcolor>
-			</control>
-			<control type="edit" id="702">
-				<posx>41</posx>
-				<posy>151</posy>
-				<width>240</width>
-				<height>33</height>
-				<onleft>-</onleft>
-				<onright>703</onright>
-				<onup>701</onup>
-				<ondown>-</ondown>
-				<onprev>701</onprev>
-				<textoffsetx>8</textoffsetx>
-				<align>left</align>
-				<aligny>center</aligny>
-				<font>sans21</font>
-				<textcolor>black</textcolor>
-				<password>true</password>
-			</control>
-			<control type="button">
-				<width>80</width>
-				<height>30</height>
-				<label>SUBMIT</label>
-				<textcolor>ffffffff</textcolor>
-				<onclick lang="python"><![CDATA[
-import sg
-win = mc.GetActiveWindow()
-user = win.GetEdit(701).GetText()
-password = win.GetEdit(702).GetText()
-if sg.login_sg(user, password):
-	sg.clear_login()
-	win.GetControl(700).SetVisible(False)
-	win.GetControl(202).SetFocus()
-	win.GetLabel(201).SetLabel(user.lower())
-	win.GetButton(202).SetLabel("LOGOUT")
-else:
-	sg.clear_login()
-	win.GetEdit(701).SetFocus()
-]]></onclick>
-			</control>
-		</control>
+    <!--
+      END Slideshow
+    -->
 	</controls>
 </window>

@@ -12,14 +12,21 @@ else:
 	win.GetButton(202).SetLabel("LOGIN")
 ]]></onload>
 	<controls>
+
+    <!-- Background Image -->
 		<control type="image">
 			<width>1280</width>
 			<height>720</height>
 			<texture>sg_background.png</texture>
 		</control>
+
 		<control type="label" id="40">
 			<visible>!Container(130).IsEmpty + !Control.HasFocus(121) + !Control.HasFocus(950)</visible>
 		</control>
+
+    <!--
+    BEGIN Search Result View
+    -->
 		<control type="group" id="129">
 			<visible>!Container(130).IsEmpty + !Control.HasFocus(121) + !Control.HasFocus(950)</visible>
 			<animation type="Visible" reversible="true">
@@ -30,12 +37,14 @@ else:
 			  <effect type="fade" start="100" end="0" delay="0" time="300" />
 			  <effect type="slide" tween="quadratic" easing="out" start="0,160" end="0,0" time="500" />
 			</animation>
+      <!-- Search Background -->
 			<control type="image">
 				<width>1280</width>
 				<height>155</height>
 				<texture>sg_search_background.png</texture>
 				<aspectratio aligny="bottom">scale</aspectratio>
 			</control>
+      <!-- Left/Right Arrows -->
 			<control type="group">
 				<visible>!Container(130).IsEmpty + !Control.HasFocus(121) + !Control.HasFocus(950)</visible>
 				<animation effect="fade" start="0" end="100" delay="100" time="500">Visible</animation>
@@ -57,6 +66,7 @@ else:
 					<visible>Container(130).HasNext</visible>
 				</control>
 			</control>
+      <!-- Results List -->
 			<control type="list" id="130">
 				<posy>15</posy>
 				<posx>62</posx>
@@ -180,13 +190,22 @@ else:
 				</content>
 			</control>
 		</control>
+    <!--
+      END Search Results View
+    -->
+
+
+    <!--
+      BEGIN Main Menu
+    -->
 		<control type="group" id="50">
-			<!-- Top Menu Bar -->
+      <!-- Main Menu Background -->
 			<control type="image">
 				<width>1280</width>
 				<height>173</height>
 				<texture>sg_topbar.png</texture>
 			</control>
+      <!-- Logo -->
 			<control type="image">
 				<posy>5</posy>
 				<posx>30</posx>
@@ -194,8 +213,8 @@ else:
 				<height>145</height>
 				<texture>sg_logo.png</texture>
 			</control>
+      <!-- Menu List -->
 			<control type="group">
-				<!-- Main Menu -->
 				<posy>122</posy>
 				<posx>265</posx>
 				<control type="image">
@@ -203,6 +222,7 @@ else:
 					<height>40</height>
 					<texture>sg_menu_ends.png</texture>
 				</control>
+        <!-- Menu Items -->
 				<control type="grouplist" id="400">
 					<posx>1</posx>
 					<itemgap>2</itemgap>
@@ -225,7 +245,7 @@ else:
 						<onclick lang="python"><![CDATA[
 import sg
 if sg.hasAuth():
-	sg.launch(14001, {"url": "rss://dir.boxee.tv/apps/suicidegirls/girls"})
+    sg.launch(14001, {"url": "rss://dir.boxee.tv/apps/suicidegirls/girls"})
 ]]></onclick>
 					</control>
 					<control type="button" id="402">
@@ -282,8 +302,8 @@ else:
 					</control>
 				</control>
 			</control>
+			<!-- Search / Sort By Dropdowns -->
 			<control type="group" id="300">
-				<!-- Search / Sort By -->
 				<posy>97</posy>
 				<posx>730</posx>
 				<control type="image">
@@ -318,8 +338,15 @@ mc.GetActiveWindow().GetControl(130).SetVisible(True)
 				</control>
 			</control>
 		</control>
+    <!--
+      END Main Menu
+    -->
+
+
+    <!--
+      BEGIN Login Panel
+    -->
 		<control type="group" id="200">
-			<!-- Login Panel -->
 			<posy>25</posy>
 			<posx>983</posx>
 			<control type="image">
@@ -373,11 +400,20 @@ else:
 ]]></onclick>
 			</control>
 		</control>
+    <!--
+      END Login Panel
+    -->
+
+
+    <!--
+      BEGIN Set View
+    -->
 		<control type="group">
 			<posy>168</posy>
 			<animation effect="slide" tween="quadratic" easing="in" start="0,0" end="0,70" time="500" condition="Control.IsVisible(40)" reversible="true">Conditional</animation>
 			<animation effect="slide" tween="quadratic" easing="out" start="0,70" end="0,0" time="500" condition="!Control.IsVisible(40)" reversible="true">Conditional</animation>
 			<control type="group">
+        <!-- Heading Label -->
 				<control type="group">
 					<posy>3</posy>
 					<posx>21</posx>
@@ -412,6 +448,7 @@ sg.launch(14002, {"url":"rss://dir.boxee.tv/apps/suicidegirls/girls/model="+para
 ]]></onclick>
 				</control>
 			</control>
+      <!-- Panel Grid List -->
 			<control type="panel" id="121">
 				<posx>80</posx>
 				<posy>95</posy>
@@ -499,6 +536,14 @@ win.GetList(5001).SetFocusedItem(focused)
 				</content>
 			</control>
 		</control>
+    <!--
+      END Set View
+    -->
+
+
+    <!--
+      BEGIN Login Box
+    -->
 		<control type="group" id="700">
 			<posy>16</posy>
 			<posx>1280</posx>
@@ -568,23 +613,28 @@ win = mc.GetActiveWindow()
 user = win.GetEdit(701).GetText()
 password = win.GetEdit(702).GetText()
 if sg.login_sg(user, password):
-	sg.clear_login()
-	win.GetControl(700).SetVisible(False)
-	win.GetControl(202).SetFocus()
-	win.GetLabel(201).SetLabel(user.lower())
-	win.GetButton(202).SetLabel("LOGOUT")
-	sg.quickLaunch(14000)
+    sg.clear_login()
+    win.GetControl(700).SetVisible(False)
+    win.GetControl(202).SetFocus()
+    win.GetLabel(201).SetLabel(user.lower())
+    win.GetButton(202).SetLabel("LOGOUT")
+    sg.quickLaunch(14000)
 else:
-	sg.clear_login()
-	win.GetEdit(701).SetFocus()
+    sg.clear_login()
+    win.GetEdit(701).SetFocus()
 ]]></onclick>
 			</control>
 		</control>
+    <!--
+      END Login Box
+    -->
+
+
+    <!--
+      BEGIN Slideshow
+    -->
 		<control type="group" id="5000">
-			<!-- SLIDESHOW -->
 			<visible>false</visible>
-			<!--<animation effect="fade" start="100" end="0" time="400" reversible="true" condition="!Control.IsVisible(5000)">Conditional</animation>-->
-			<!--<animation effect="fade" start="0" end="100" time="400" reversible="true" condition="Control.IsVisible(5000)">Conditional</animation>-->
 			<control type="image">
 				<width>1280</width>
 				<height>720</height>
@@ -656,7 +706,6 @@ win.GetList(140).SetFocusedItem(win.GetList(5001).GetFocusedItem())
 						<bordertexture>sg_faded_border.png</bordertexture>
 						<aspectratio align="center" aligny="center">keep</aspectratio>
 						<animation effect="fade" start="0" end="100" time="300">Focus</animation>
-						<!--<animation effect="fade" start="100" end="0" time="100">UnFocus</animation>-->
 						<visible>ListItem.property(isloaded)</visible>
 					</control>
 				</focusedlayout>
@@ -674,15 +723,6 @@ win.GetList(140).SetFocusedItem(win.GetList(5001).GetFocusedItem())
 				<animation effect="fade" start="100" end="0" time="100" reversible="true">Hidden</animation>
 				<animation effect="fade" start="0" end="100" time="200" delay="300" reversible="true">Visible</animation>
 			</control>
-			<!--<control type="group">-->
-			<!--	<posx>30</posx>-->
-			<!--	<posy>12</posy>-->
-			<!--	<control type="image">-->
-			<!--		<width>177</width>-->
-			<!--		<height>136</height>-->
-			<!--		<texture>sg_show_counter.png</texture>-->
-			<!--	</control>-->
-			<!--</control>-->
 			<control type="group">
 				<posx>0</posx>
 				<posy>693</posy>
@@ -793,11 +833,9 @@ win.GetList(140).SetFocusedItem(win.GetList(5001).GetFocusedItem())
 								<texture diffuse="sg_thumb_diffuse_sm.png">$INFO[Listitem.thumb]</texture>
 								<aspectratio scalediffuse="false">keep</aspectratio>
 								<animation type="Focus" reversible="true">
-									<!--<effect type="fade" start="70" end="100" delay="0" time="200" />-->
 									<effect type="zoom" center="auto" start="100" end="115" time="200" />
 								</animation>
 								<animation type="UnFocus" reversible="true">
-									<!--<effect type="fade" start="100" end="70" delay="0" time="200" />-->
 									<effect type="zoom" center="auto" start="115" end="100" time="200" />
 								</animation>
 							</control>
@@ -834,5 +872,8 @@ mc.GetActiveWindow().GetList(5001).SetFocusedItem(item)
 				</control>
 			</control>
 		</control>
+    <!--
+      END Slideshow
+    -->
 	</controls>
 </window>

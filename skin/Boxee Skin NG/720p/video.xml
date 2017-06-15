@@ -12,15 +12,22 @@ else:
 	win.GetButton(202).SetLabel("LOGIN")
 ]]></onload>
 	<controls>
+
+    <!-- Background Image -->
 		<control type="image">
 			<width>1280</width>
 			<height>720</height>
 			<texture>sg_background.png</texture>
 		</control>
+
 		<control type="label" id="40">
 			<visible>!Container(130).IsEmpty + !Control.HasFocus(121)</visible>
 		</control>
-		<control type="group" id="129">
+
+    <!--
+    BEGIN Search Result View
+    -->
+    <control type="group" id="129">
 			<visible>!Container(130).IsEmpty + !Control.HasFocus(121)</visible>
 			<animation type="Visible" reversible="true">
 			  <effect type="fade" start="0" end="100" delay="0" time="300" />
@@ -30,12 +37,14 @@ else:
 			  <effect type="fade" start="100" end="0" delay="0" time="300" />
 			  <effect type="slide" tween="quadratic" easing="out" start="0,160" end="0,0" time="500" />
 			</animation>
+      <!-- Search Background -->
 			<control type="image">
 				<width>1280</width>
 				<height>155</height>
 				<texture>sg_search_background.png</texture>
 				<aspectratio aligny="bottom">scale</aspectratio>
 			</control>
+      <!-- Left/Right Arrows -->
 			<control type="group">
 				<visible>!Container(130).IsEmpty + !Control.HasFocus(121)</visible>
 				<animation effect="fade" start="0" end="100" delay="100" time="500">Visible</animation>
@@ -57,6 +66,7 @@ else:
 					<visible>Container(130).HasNext</visible>
 				</control>
 			</control>
+      <!-- Results List -->
 			<control type="list" id="130">
 				<posy>15</posy>
 				<posx>62</posx>
@@ -180,13 +190,22 @@ else:
 				</content>
 			</control>
 		</control>
+    <!--
+      END Search Results View
+    -->
+
+
+    <!--
+      BEGIN Main Menu
+    -->
 		<control type="group" id="50">
-			<!-- Top Menu Bar -->
+      <!-- Main Menu Background -->
 			<control type="image">
 				<width>1280</width>
 				<height>173</height>
 				<texture>sg_topbar.png</texture>
 			</control>
+      <!-- Logo -->
 			<control type="image">
 				<posy>5</posy>
 				<posx>30</posx>
@@ -194,8 +213,8 @@ else:
 				<height>145</height>
 				<texture>sg_logo.png</texture>
 			</control>
+      <!-- Menu List -->
 			<control type="group">
-				<!-- Main Menu -->
 				<posy>122</posy>
 				<posx>265</posx>
 				<control type="image">
@@ -225,7 +244,7 @@ else:
 						<onclick lang="python"><![CDATA[
 import sg
 if sg.hasAuth():
-	sg.launch(14001, {"url": "rss://dir.boxee.tv/apps/suicidegirls/girls"})
+    sg.launch(14001, {"url": "rss://dir.boxee.tv/apps/suicidegirls/girls"})
 ]]></onclick>
 					</control>
 					<control type="button" id="402">
@@ -282,8 +301,8 @@ else:
 					</control>
 				</control>
 			</control>
+			<!-- Search / Sort By Dropdowns -->
 			<control type="group" id="300">
-				<!-- Search / Sort By -->
 				<posy>97</posy>
 				<posx>730</posx>
 				<control type="image">
@@ -318,8 +337,15 @@ mc.GetActiveWindow().GetControl(130).SetVisible(True)
 				</control>
 			</control>
 		</control>
+    <!--
+      END Main Menu
+    -->
+
+
+    <!--
+      BEGIN Login Panel
+    -->
 		<control type="group" id="200">
-			<!-- Login Panel -->
 			<posy>25</posy>
 			<posx>983</posx>
 			<control type="image">
@@ -364,19 +390,29 @@ mc.GetActiveWindow().GetControl(130).SetVisible(True)
 				<onclick lang="python"><![CDATA[
 win = mc.GetActiveWindow()
 config = mc.GetApp().GetLocalConfig()
-if config.GetValue("authenticated"): sg.logout_sg()
+if config.GetValue("authenticated"):
+    sg.logout_sg()
 else:
-	win = mc.GetActiveWindow()
-	win.PushState()
-	win.GetControl(700).SetVisible(True)
-	win.GetControl(701).SetFocus()
+    win = mc.GetActiveWindow()
+    win.PushState()
+    win.GetControl(700).SetVisible(True)
+    win.GetControl(701).SetFocus()
 ]]></onclick>
 			</control>
 		</control>
+    <!--
+      END Login Panel
+    -->
+
+
+    <!--
+      BEGIN Video View
+    -->
 		<control type="group">
 			<posy>168</posy>
 			<animation effect="slide" tween="quadratic" easing="in" start="0,0" end="0,70" time="500" condition="Control.IsVisible(40)" reversible="true">Conditional</animation>
 			<animation effect="slide" tween="quadratic" easing="out" start="0,70" end="0,0" time="500" condition="!Control.IsVisible(40)" reversible="true">Conditional</animation>
+      <!-- Heading Label -->
 			<control type="label">
 				<posy>3</posy>
 				<posx>21</posx>
@@ -384,6 +420,7 @@ else:
 				<textcolor>ffFFC0CB</textcolor>
 				<label>SuicideGirls Video</label>
 			</control>
+      <!-- Panel Grid List -->
 			<control type="panel" id="121">
 				<posx>79</posx>
 				<posy>55</posy>
@@ -493,6 +530,14 @@ mc.GetPlayer().PlayWithActionMenu(item)
 				</content>
 			</control>
 		</control>
+    <!--
+      END Video View
+    -->
+
+
+    <!--
+      BEGIN Login Box
+    -->
 		<control type="group" id="700">
 			<posy>16</posy>
 			<posx>1280</posx>
@@ -573,5 +618,8 @@ else:
 ]]></onclick>
 			</control>
 		</control>
+    <!--
+      END Login Box
+    -->
 	</controls>
 </window>

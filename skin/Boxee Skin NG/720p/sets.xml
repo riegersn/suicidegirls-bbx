@@ -7,20 +7,28 @@ win = mc.GetActiveWindow()
 win.GetList(130).SetItems(mc.ListItems())
 config = mc.GetApp().GetLocalConfig()
 if config.GetValue("authenticated"):
-	win.GetButton(202).SetLabel("LOGOUT")
+    win.GetButton(202).SetLabel("LOGOUT")
 else:
-	win.GetButton(202).SetLabel("LOGIN")
+    win.GetButton(202).SetLabel("LOGIN")
 ]]></onload>
 	<controls>
+
+    <!-- Background Image -->
 		<control type="image">
 			<width>1280</width>
 			<height>720</height>
 			<texture>sg_background.png</texture>
 		</control>
+
 		<control type="label" id="40">
 			<visible>!Container(130).IsEmpty + !Control.HasFocus(121)</visible>
 		</control>
-		<control type="group" id="129">
+
+
+    <!--
+    BEGIN Search Result View
+    -->
+    <control type="group" id="129">
 			<visible>!Container(130).IsEmpty + !Control.HasFocus(121)</visible>
 			<animation type="Visible" reversible="true">
 			  <effect type="fade" start="0" end="100" delay="0" time="300" />
@@ -30,12 +38,14 @@ else:
 			  <effect type="fade" start="100" end="0" delay="0" time="300" />
 			  <effect type="slide" tween="quadratic" easing="out" start="0,160" end="0,0" time="500" />
 			</animation>
+      <!-- Search Background -->
 			<control type="image">
 				<width>1280</width>
 				<height>155</height>
 				<texture>sg_search_background.png</texture>
 				<aspectratio aligny="bottom">scale</aspectratio>
 			</control>
+      <!-- Left/Right Arrows -->
 			<control type="group">
 				<visible>!Container(130).IsEmpty + !Control.HasFocus(121)</visible>
 				<animation effect="fade" start="0" end="100" delay="100" time="500">Visible</animation>
@@ -57,6 +67,7 @@ else:
 					<visible>Container(130).HasNext</visible>
 				</control>
 			</control>
+      <!-- Results List -->
 			<control type="list" id="130">
 				<posy>15</posy>
 				<posx>62</posx>
@@ -163,31 +174,39 @@ item = list.GetItem( list.GetFocusedItem() )
 item.Dump()
 reg = mc.GetApp().GetLocalConfig()
 if not reg.GetValue("authenticated"):
-	mc.ShowDialogNotification("You must be logged in to perform this action.", "sg_icon_notification.png")
+    mc.ShowDialogNotification("You must be logged in to perform this action.", "sg_icon_notification.png")
 else:
-	win = mc.GetActiveWindow()
-	list = win.GetList(130)
-	item = list.GetItem( list.GetFocusedItem() )
-	win.GetList(121).SetItems(mc.ListItems())
-	params = {
-		"url":			item.GetPath(),
-		"model":		item.GetLabel(),
-		"thumb":		item.GetThumbnail()
-		}
-	#sg.launch(14002, params)
-	win.GetLabel(120).SetLabel(params['model'])
-	win.GetList(121).SetContentURL(params['url'])
+    win = mc.GetActiveWindow()
+    list = win.GetList(130)
+    item = list.GetItem( list.GetFocusedItem() )
+    win.GetList(121).SetItems(mc.ListItems())
+    params = {
+        "url":			item.GetPath(),
+        "model":		item.GetLabel(),
+        "thumb":		item.GetThumbnail()
+        }
+    win.GetLabel(120).SetLabel(params['model'])
+    win.GetList(121).SetContentURL(params['url'])
 ]]></onclick>
 				</content>
 			</control>
 		</control>
+    <!--
+      END Search Results View
+    -->
+
+
+    <!--
+      BEGIN Main Menu
+    -->
 		<control type="group" id="50">
-			<!-- Top Menu Bar -->
+      <!-- Main Menu Background -->
 			<control type="image">
 				<width>1280</width>
 				<height>173</height>
 				<texture>sg_topbar.png</texture>
 			</control>
+      <!-- Logo -->
 			<control type="image">
 				<posy>5</posy>
 				<posx>30</posx>
@@ -195,8 +214,8 @@ else:
 				<height>145</height>
 				<texture>sg_logo.png</texture>
 			</control>
+      <!-- Menu List -->
 			<control type="group">
-				<!-- Main Menu -->
 				<posy>122</posy>
 				<posx>265</posx>
 				<control type="image">
@@ -204,6 +223,7 @@ else:
 					<height>40</height>
 					<texture>sg_menu_ends.png</texture>
 				</control>
+        <!-- Menu Items -->
 				<control type="grouplist" id="400">
 					<posx>1</posx>
 					<itemgap>2</itemgap>
@@ -226,7 +246,7 @@ else:
 						<onclick lang="python"><![CDATA[
 import sg
 if sg.hasAuth():
-	sg.launch(14001, {"url": "rss://dir.boxee.tv/apps/suicidegirls/girls"})
+  	sg.launch(14001, {"url": "rss://dir.boxee.tv/apps/suicidegirls/girls"})
 ]]></onclick>
 					</control>
 					<control type="button" id="402">
@@ -263,9 +283,9 @@ sg.quickLaunch(14000)
 						<onclick lang="python"><![CDATA[
 import sg
 if sg.hasAuth():
-	sg.quickLaunch(14000)
+    sg.quickLaunch(14000)
 else:
-	sg.launch(14003, {"url":"rss://dir.boxee.tv/apps/suicidegirls/free","model":"SuicideGirls","set":"Free Album Set"})
+    sg.launch(14003, {"url":"rss://dir.boxee.tv/apps/suicidegirls/free","model":"SuicideGirls","set":"Free Album Set"})
 ]]></onclick>
 					</control>
 					<control type="button" id="404">
@@ -283,8 +303,8 @@ else:
 					</control>
 				</control>
 			</control>
+			<!-- Search / Sort By Dropdowns -->
 			<control type="group" id="300">
-				<!-- Search / Sort By -->
 				<posy>97</posy>
 				<posx>730</posx>
 				<control type="image">
@@ -319,8 +339,15 @@ mc.GetActiveWindow().GetControl(130).SetVisible(True)
 				</control>
 			</control>
 		</control>
+    <!--
+      END Main Menu
+    -->
+
+
+    <!--
+      BEGIN Login Panel
+    -->
 		<control type="group" id="200">
-			<!-- Login Panel -->
 			<posy>25</posy>
 			<posx>983</posx>
 			<control type="image">
@@ -374,10 +401,19 @@ else:
 ]]></onclick>
 			</control>
 		</control>
+    <!--
+      END Login Panel
+    -->
+
+
+    <!--
+      BEGIN Sets View
+    -->
 		<control type="group">
 			<posy>168</posy>
 			<animation effect="slide" tween="quadratic" easing="in" start="0,0" end="0,70" time="500" condition="Control.IsVisible(40)" reversible="true">Conditional</animation>
 			<animation effect="slide" tween="quadratic" easing="out" start="0,70" end="0,0" time="500" condition="!Control.IsVisible(40)" reversible="true">Conditional</animation>
+      <!-- Heading Label -->
 			<control type="label" id="120">
 				<posy>3</posy>
 				<posx>21</posx>
@@ -386,6 +422,7 @@ else:
 				<shadowcolor>cc000000</shadowcolor>
 				<label>$INFO[App.param(model)]</label>
 			</control>
+      <!-- Panel Grid List -->
 			<control type="panel" id="121">
 				<posx>21</posx>
 				<posy>55</posy>
@@ -489,12 +526,23 @@ else:
 list =  mc.GetActiveWindow().GetList(121)
 item = list.GetItem( list.GetFocusedItem() )
 model,set = item.GetLabel().split(": ")
-params = {"url":item.GetPath(),"model":model,"set":set}
+params = {
+    "url":    item.GetPath(),
+    "model":  model,"set":set
+    }
 sg.launch(14003, params)
 ]]></onclick>
 				</content>
 			</control>
 		</control>
+    <!--
+      END All Girls View
+    -->
+
+
+    <!--
+      BEGIN Login Box
+    -->
 		<control type="group" id="700">
 			<posy>16</posy>
 			<posx>1280</posx>
@@ -575,6 +623,12 @@ else:
 ]]></onclick>
 			</control>
 		</control>
+    <!--
+      END Login Box
+    -->
+
+
+    <!-- Loading Images -->
 		<control type="label">
 			<animation effect="fade" time="100">VisibleChange</animation>
 			<posx>540</posx>
